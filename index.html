@@ -45,7 +45,7 @@
 <body>
     <header>
         <nav>
-            <a href="#" data-target="home" class="active">星星影视</a>
+            <a href="#" data-target="home" class="active">星星影视（网页有背景音乐在右下角）</a>
 
         </nav>
     </header>
@@ -96,6 +96,118 @@
             <p>感谢支持谢谢，公众号这个👆🏻不要迷路了哦宝。</p>
         </section>
             </style>   
+        <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 200px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .music-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .music-list-item {
+            padding: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .music-list-item:hover {
+            background-color: #e0e0e0;
+        }
+        .control-button {
+            display: block;
+            padding: 5px 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .control-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="music-player">
+        <div id="current-song">正在播放: 歌曲名称</div>
+        <div class="music-list" id="music-list">
+            <!-- 播放列表项将在此处动态生成 -->
+        </div>
+        <div>
+            <button class="control-button" onclick="playPrevious()">上一首</button>
+            <button class="control-button" onclick="togglePlayPause()">播放/暂停</button>
+            <button class="control-button" onclick="playNext()">下一首</button>
+        </div>
+    </div>
+
+    <audio id="player" src="" autoplay></audio>
+
+    <script>
+        const player = document.getElementById('player');
+        const currentSongElement = document.getElementById('current-song');
+        const musicListElement = document.getElementById('music-list');
+
+        let songs = [
+            { name: '小野道ono，Karin – 单向地铁', src: 'http://154.3.2.66:8889/down/BrD6PcywXP8c.mp3' },
+            { name: '枕元にゴースト (枕边幽灵) (ctrl+r Remix)-ctrl+r,Aiobahn,Yunomi', src: 'http://154.3.2.66:8889/down/rC5UXpsN5yEC.mp3' },
+            { name: '小野道ono,乌拉喵 – 海豚与广播', src: 'http://154.3.2.66:8889/down/XAaRmRaHc2sb.mp3' }
+        ];
+        let currentSongIndex = 0;
+
+        function playSong(songIndex) {
+            player.src = songs[songIndex].src;
+            currentSongElement.textContent = `正在播放: ${songs[songIndex].name}`;
+            player.play();
+        }
+
+        function togglePlayPause() {
+            if (player.paused) {
+                player.play();
+            } else {
+                player.pause();
+            }
+        }
+
+        function playNext() {
+            currentSongIndex = (currentSongIndex + 1) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        function playPrevious() {
+            currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+            playSong(currentSongIndex);
+        }
+
+        // 动态生成播放列表
+        songs.forEach((song, index) => {
+            const li = document.createElement('li');
+            li.className = 'music-list-item';
+            li.textContent = song.name;
+            li.onclick = () => {
+                currentSongIndex = index;
+                playSong(index);
+            };
+            musicListElement.appendChild(li);
+        });
+
+        // 默认播放第一首歌曲
+        playSong(currentSongIndex);
+    </script>
+    
                <script>
         (function () {
             var a_idx = 0;
